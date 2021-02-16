@@ -43,9 +43,9 @@ namespace Platformer.Managers
 
         public void ChangeAnimation(string name)
         {
-            activeAnimation?.ResetState();
-            if(animations.ContainsKey(name))
+            if(animations.ContainsKey(name) && animations[name] != activeAnimation)
             {
+                activeAnimation?.ResetState();
                 activeAnimation = animations[name];
             }
         }

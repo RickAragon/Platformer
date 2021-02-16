@@ -18,11 +18,14 @@ namespace Platformer.Utils
         }
 
         public int Step { get; set; }
+        public long acumulatedFrames = 0;
 
-        public Animation(Point animationStart, Point animationBounds, int step = 1)
+        public Animation(Point animationStart, Point animationBounds, int step = 200)
         {
             this.animationStart = animationStart;
+            this.animationState = animationStart;
             this.animationBounds = animationBounds;
+            Step = step;
         }
 
         public void ResetState()
@@ -31,15 +34,15 @@ namespace Platformer.Utils
         }
         public void Update(GameTime gameTime)
         {
-            if(Step > gameTime.ElapsedGameTime.TotalMilliseconds)
+            if(acumulatedFrames > Step)
             {
-                Step = 0;
+                acumulatedFrames = 0;
                 if(animationState.X + 1 >= animationBounds.X)
                 {
-                    animationState.X = 0;
+                    animationState.X = animationStart.X;
                     if(animationState.Y + 1 >= animationBounds.Y)
                     {
-                        animationState.Y = 0;
+                        animationState.Y = animationStart.Y;
                     }
                     else
                     {
@@ -53,7 +56,7 @@ namespace Platformer.Utils
             }
             else
             {
-                Step += gameTime.ElapsedGameTime.Milliseconds;
+                acumulatedFrames += gameTime.ElapsedGameTime.Milliseconds;
             }
         }
     }

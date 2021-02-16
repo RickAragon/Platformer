@@ -45,6 +45,7 @@
     <Compile Include="Actors\BaseActor.cs" />
     <Compile Include="GameClass.cs" />
     <Compile Include="Managers\AnimationManager.cs" />
+    <Compile Include="Managers\InputManager.cs" />
     <Compile Include="Managers\DrawableAnimationManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

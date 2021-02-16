@@ -52,7 +52,8 @@ namespace Platformer
             marioTex = Content.Load<Texture2D>("Textures/mario");
             animanager = new Managers.DrawableAnimationManager(marioTex, new Point(16, 16));
             animanager.AddAnimation("IDLE", new Utils.Animation(Point.Zero, new Point(1, 1)));
-            animanager.AddAnimation("RUN", new Utils.Animation(new Point(1, 0), new Point(4, 1)));
+            animanager.AddAnimation("WALK", new Utils.Animation(new Point(1, 0), new Point(4, 1), 250));
+            animanager.AddAnimation("RUN", new Utils.Animation(new Point(1, 0), new Point(4, 1), 120));
             animanager.AddAnimation("JUMP", new Utils.Animation(new Point(5, 0), new Point(6, 1)));
         }
 
@@ -76,6 +77,18 @@ namespace Platformer
                 Exit();
 
             // TODO: Add your update logic here
+            KeyboardState ks = Keyboard.GetState();
+            if (ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.D))
+            {
+                if (ks.IsKeyDown(Keys.LeftShift))
+                    animanager.ChangeAnimation("RUN");
+                else
+                    animanager.ChangeAnimation("WALK");
+            }
+            else
+            {
+                animanager.ChangeAnimation("IDLE");
+            }
             animanager.Update(gameTime);
             base.Update(gameTime);
         }
