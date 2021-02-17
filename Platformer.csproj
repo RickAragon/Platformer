@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Actors\BaseActor.cs" />
+    <Compile Include="Actors\PlayerActor.cs" />
     <Compile Include="GameClass.cs" />
     <Compile Include="Managers\AnimationManager.cs" />
     <Compile Include="Managers\InputManager.cs" />

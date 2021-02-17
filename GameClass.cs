@@ -2,6 +2,9 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+using Platformer.Actors;
+using Platformer.Managers;
+
 namespace Platformer
 {
     /// <summary>
@@ -12,8 +15,8 @@ namespace Platformer
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        private Managers.DrawableAnimationManager animanager;
-        private Texture2D marioTex;
+        private PlayerActor player;
+        private InputManager inputManager;
 
         private RenderTarget2D renderTarget;
         
@@ -21,9 +24,6 @@ namespace Platformer
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 600;
-            graphics.PreferredBackBufferHeight = 600;
-            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -35,7 +35,11 @@ namespace Platformer
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            renderTarget = new RenderTarget2D(GraphicsDevice, 128, 128);
+            renderTarget = new RenderTarget2D(GraphicsDevice, 800, 450);
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 450;
+            graphics.ApplyChanges();
+            inputManager = InputManager.GetInstance();
             base.Initialize();
         }
 
@@ -49,12 +53,11 @@ namespace Platformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            marioTex = Content.Load<Texture2D>("Textures/mario");
-            animanager = new Managers.DrawableAnimationManager(marioTex, new Point(16, 16));
-            animanager.AddAnimation("IDLE", new Utils.Animation(Point.Zero, new Point(1, 1)));
-            animanager.AddAnimation("WALK", new Utils.Animation(new Point(1, 0), new Point(4, 1), 250));
-            animanager.AddAnimation("RUN", new Utils.Animation(new Point(1, 0), new Point(4, 1), 120));
-            animanager.AddAnimation("JUMP", new Utils.Animation(new Point(5, 0), new Point(6, 1)));
+            player = new PlayerActor(Content.Load<Texture2D>("Textures/mario"), new Point(16, 16), new Point(2,1));
+            player.AddAnimation("IDLE", new Utils.Animation(Point.Zero, new Point(1, 1)));
+            player.AddAnimation("WALK", new Utils.Animation(new Point(1, 0), new Point(4, 1), 250));
+            player.AddAnimation("RUN", new Utils.Animation(new Point(1, 0), new Point(4, 1), 120));
+            player.AddAnimation("JUMP", new Utils.Animation(new Point(5, 0), new Point(6, 1)));
         }
 
         /// <summary>
@@ -76,20 +79,8 @@ namespace Platformer
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
-            KeyboardState ks = Keyboard.GetState();
-            if (ks.IsKeyDown(Keys.A) || ks.IsKeyDown(Keys.D))
-            {
-                if (ks.IsKeyDown(Keys.LeftShift))
-                    animanager.ChangeAnimation("RUN");
-                else
-                    animanager.ChangeAnimation("WALK");
-            }
-            else
-            {
-                animanager.ChangeAnimation("IDLE");
-            }
-            animanager.Update(gameTime);
+            inputManager.Update(gameTime);
+            player.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -102,8 +93,7 @@ namespace Platformer
             GraphicsDevice.Clear(Color.CornflowerBlue);
             GraphicsDevice.SetRenderTarget(renderTarget);
             spriteBatch.Begin();
-            spriteBatch.Draw(marioTex, new Rectangle(0, 0, 16, 16), new Rectangle(0, 0, 16, 16), Color.White);
-            animanager.Draw(spriteBatch, new Rectangle(64, 64, 16, 16));
+            player.Draw(spriteBatch);
             spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
