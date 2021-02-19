@@ -15,6 +15,7 @@ namespace Platformer
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        private Point resolution;
         private PlayerActor player;
         private InputManager inputManager;
 
@@ -35,9 +36,10 @@ namespace Platformer
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            renderTarget = new RenderTarget2D(GraphicsDevice, 800, 450);
-            graphics.PreferredBackBufferWidth = 800;
-            graphics.PreferredBackBufferHeight = 450;
+            resolution = new Point(800, 450);
+            renderTarget = new RenderTarget2D(GraphicsDevice, resolution.X, resolution.Y);
+            graphics.PreferredBackBufferWidth = resolution.X;
+            graphics.PreferredBackBufferHeight = resolution.Y;
             graphics.ApplyChanges();
             inputManager = InputManager.GetInstance();
             base.Initialize();
@@ -53,7 +55,7 @@ namespace Platformer
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            player = new PlayerActor(Content.Load<Texture2D>("Textures/mario"), new Point(16, 16), new Point(2,1));
+            player = new PlayerActor(Content.Load<Texture2D>("Textures/mario"), new Point(16, 16), new Point(2,2));
             player.AddAnimation("IDLE", new Utils.Animation(Point.Zero, new Point(1, 1)));
             player.AddAnimation("WALK", new Utils.Animation(new Point(1, 0), new Point(4, 1), 250));
             player.AddAnimation("RUN", new Utils.Animation(new Point(1, 0), new Point(4, 1), 120));
@@ -97,7 +99,7 @@ namespace Platformer
             spriteBatch.End();
             GraphicsDevice.SetRenderTarget(null);
             spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp);
-            spriteBatch.Draw(renderTarget, new Rectangle(0, 0, 600, 600), Color.White);
+            spriteBatch.Draw(renderTarget, new Rectangle(0, 0, resolution.X, resolution.Y), Color.White);
             spriteBatch.End();
             // TODO: Add your drawing code here
 

@@ -29,23 +29,30 @@ namespace Platformer.Actors
         {
             inputManager = InputManager.GetInstance();
             animationManager = new DrawableAnimationManager(texture, innerSize);
+            inputManager.Bindings.Add(Keys.Z, ControlsInput.A);
+            inputManager.Bindings.Add(Keys.X, ControlsInput.B);
             inputManager.OnButtonPress += (pressedKey, controlInput) =>
             {
                 switch(controlInput)
                 {
+                    case ControlsInput.LDown: 
                     case ControlsInput.Down:
                         position.Y += Rapidez;
                         break;
+                    case ControlsInput.LUp: 
                     case ControlsInput.Up:
                         position.Y -= Rapidez;
                         break;
+                    case ControlsInput.LLeft: 
                     case ControlsInput.Left:
                         position.X -= Rapidez;
                         break;
+                    case ControlsInput.LRight:
                     case ControlsInput.Right:
                         position.X += Rapidez;
                         break;
                     case ControlsInput.A:
+
                         break;
                     case ControlsInput.X:
                         break;

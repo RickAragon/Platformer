@@ -1,3 +1,6 @@
 .vs/
 bin/
 obj/
+Properties/
+Game1.sln
+Platformer.csproj
